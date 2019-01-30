@@ -1,0 +1,1 @@
+enum DisplayMode { Linear, Grid }
