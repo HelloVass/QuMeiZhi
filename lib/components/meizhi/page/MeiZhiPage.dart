@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_meizhi/components/meizhi/dto/MeiZhiDTO.dart';
+import 'package:flutter_meizhi/components/meizhi/vo/MeiZhiVO.dart';
 import 'package:flutter_meizhi/components/meizhi/vo/DisplayMode.dart';
-import 'package:flutter_meizhi/components/meizhi/mock/MockApi.dart';
-import 'package:flutter_meizhi/components/common/delegateManager/DelegateManager.dart';
+import 'package:flutter_meizhi/components/meizhi/components/ImageDelegate.dart';
+import 'package:flutter_meizhi/components/common/loadMore/LoadMoreWidget.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
 
 class MeiZhiPage extends StatefulWidget {
   @override
@@ -14,11 +18,8 @@ class _State extends State<MeiZhiPage> {
   // 显示模式，线性或者网格
   var _mode = DisplayMode.Linear;
 
-  // 页数
-  var _pageNum = 0;
-
   // 加载中
-  var isLoading = false;
+  var loading = false;
 
   // 有更多
   var hasMore = true;
@@ -26,34 +27,16 @@ class _State extends State<MeiZhiPage> {
   // 出错
   var error;
 
-  List<int> items = List.generate(10, (i) => i);
+  // 页数
+  var _pageNum = 1;
 
-  ScrollController _scrollController = ScrollController();
-
-  MockApi _mockApi = MockApi();
+  // 数据
+  List<MeiZhiVO> items = List();
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        // 滑动到底部
-        if (error != null) {
-          // 发生错误
-          return;
-        }
-        if (isLoading) {
-          // 还在加载中
-          return;
-        }
-        if (!hasMore) {
-          // 没有更多数据了
-          return;
-        }
-        _loadMore();
-      }
-    });
+    _loadData();
   }
 
   @override
@@ -75,19 +58,41 @@ class _State extends State<MeiZhiPage> {
           )
         ],
       ),
-      body: DelegateManager(),
+      body: LoadMoreWidget(
+        crossAxisCount: _mode == DisplayMode.Linear ? 1 : 2,
+        adapt: (BuildContext context, int position) => ImageDelegate(
+              data: items[position],
+            ),
+        itemCount: items.length,
+        hasMore: hasMore,
+        loading: loading,
+        error: error,
+        loadMore: () {
+          _loadData();
+        },
+      ),
     );
   }
 
-  void _loadMore() async {
-    List<int> newItems = await _mockApi.mock(items.length, items.length + 10);
+  void _loadData() async {
     setState(() {
-      items.addAll(newItems);
+      loading = true;
     });
-  }
 
-  @override
-  void dispose() {
-    super.dispose();
+    await Dio().get("http://gank.io/api/data/福利/20/$_pageNum").then((value) {
+      setState(() {
+        MeiZhiDTO meiZhiDTO = MeiZhiDTO.fromJson(json.decode(value.toString()));
+        items.addAll(meiZhiDTO.results.map((item) => MeiZhiVO(item)));
+        error = null;
+        loading = false;
+        hasMore = meiZhiDTO.results.length >= 10;
+        _pageNum++;
+      });
+    }).catchError((e) {
+      setState(() {
+        error = e;
+        loading = false;
+      });
+    });
   }
 }
