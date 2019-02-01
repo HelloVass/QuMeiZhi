@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/components/meizhi/vo/MeiZhiVO.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_meizhi/components/meizhiDetail/page/MeiZhiDetailPage.dart';
 
 class ImageDelegate extends StatelessWidget {
   final MeiZhiVO data;
@@ -9,10 +10,12 @@ class ImageDelegate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      child: new GestureDetector(
-          onTap: () {},
-          child: new CachedNetworkImage(
+    return Container(
+      child: GestureDetector(
+          onTap: () {
+            _redirectToDetail(context, data);
+          },
+          child: CachedNetworkImage(
             fit: BoxFit.cover,
             placeholder: Image(
               image: AssetImage("images/img_placeholder.png"),
@@ -21,5 +24,15 @@ class ImageDelegate extends StatelessWidget {
             imageUrl: data.wrapper.url,
           )),
     );
+  }
+
+  void _redirectToDetail(BuildContext context, MeiZhiVO data) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MeiZhiDetailPage(
+                  title: data.wrapper.desc,
+                  url: data.wrapper.url,
+                )));
   }
 }
