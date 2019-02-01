@@ -78,6 +78,7 @@ class _State extends State<MeiZhiPage> {
     // 开始加载
     setState(() {
       loading = true;
+      error = null;
     });
 
     await ApiClient.get("api/data/福利/20/$_pageNum").then((json) {
@@ -92,6 +93,11 @@ class _State extends State<MeiZhiPage> {
         hasMore = newItems.length >= 10;
         error = null;
         _pageNum++;
+      });
+    }).catchError((e) {
+      setState(() {
+        loading = false;
+        error = "加载出错";
       });
     });
   }
