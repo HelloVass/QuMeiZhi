@@ -18,7 +18,7 @@ class ImageDelegate extends StatelessWidget {
               image: AssetImage("images/img_placeholder.png"),
               fit: BoxFit.cover,
             ),
-            imageUrl: data.item.url,
+            imageUrl: data.wrapper.url,
           )),
     );
   }

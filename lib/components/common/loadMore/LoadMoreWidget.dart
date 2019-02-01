@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/components/common/loadMore/DefaultLoadingWidget.dart';
 
+typedef Adapt = Function(BuildContext context, int index);
+
+typedef LoadMore = Function();
+
 class LoadMoreWidget extends StatefulWidget {
   final int crossAxisCount;
 
   final int itemCount;
 
-  final Function adapt;
+  final Adapt adapt;
 
   final bool hasMore;
 
@@ -14,7 +18,7 @@ class LoadMoreWidget extends StatefulWidget {
 
   final String error;
 
-  final Function loadMore;
+  final LoadMore loadMore;
 
   LoadMoreWidget(
       {Key key,

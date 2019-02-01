@@ -32,7 +32,7 @@ class DefaultLoadingWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             CircularProgressIndicator(
-              strokeWidth: 1.0,
+              strokeWidth: 5.0,
             )
           ],
         ),

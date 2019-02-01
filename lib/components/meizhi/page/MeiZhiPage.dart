@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_meizhi/components/meizhi/dto/MeiZhiDTO.dart';
 import 'package:flutter_meizhi/components/meizhi/vo/MeiZhiVO.dart';
 import 'package:flutter_meizhi/components/meizhi/vo/DisplayMode.dart';
 import 'package:flutter_meizhi/components/meizhi/components/ImageDelegate.dart';
 import 'package:flutter_meizhi/components/common/loadMore/LoadMoreWidget.dart';
-import 'package:dio/dio.dart';
-import 'dart:convert';
+import 'package:flutter_meizhi/api/ApiClient.dart';
+import 'package:flutter_meizhi/api/dto/Result.dart';
+import 'package:flutter_meizhi/api/dto/MeiZhiResponse.dart';
 
 class MeiZhiPage extends StatefulWidget {
   @override
@@ -60,8 +60,8 @@ class _State extends State<MeiZhiPage> {
       ),
       body: LoadMoreWidget(
         crossAxisCount: _mode == DisplayMode.Linear ? 1 : 2,
-        adapt: (BuildContext context, int position) => ImageDelegate(
-              data: items[position],
+        adapt: (BuildContext context, int index) => ImageDelegate(
+              data: items[index],
             ),
         itemCount: items.length,
         hasMore: hasMore,
@@ -75,23 +75,23 @@ class _State extends State<MeiZhiPage> {
   }
 
   void _loadData() async {
+    // 开始加载
     setState(() {
       loading = true;
     });
 
-    await Dio().get("http://gank.io/api/data/福利/20/$_pageNum").then((value) {
+    await ApiClient.get("api/data/福利/20/$_pageNum").then((json) {
       setState(() {
-        MeiZhiDTO meiZhiDTO = MeiZhiDTO.fromJson(json.decode(value.toString()));
-        items.addAll(meiZhiDTO.results.map((item) => MeiZhiVO(item)));
+        List<MeiZhiVO> newItems = Result.fromJson(
+                json: json, mapper: (json) => MeiZhiResponse.fromJson(json))
+            .results
+            .map((v) => MeiZhiVO(v))
+            .toList();
+        items += newItems;
+        loading = false;
+        hasMore = newItems.length >= 10;
         error = null;
-        loading = false;
-        hasMore = meiZhiDTO.results.length >= 10;
         _pageNum++;
-      });
-    }).catchError((e) {
-      setState(() {
-        error = e;
-        loading = false;
       });
     });
   }

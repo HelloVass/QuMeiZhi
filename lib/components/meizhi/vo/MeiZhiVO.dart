@@ -1,7 +1,7 @@
-import 'package:flutter_meizhi/components/meizhi/dto/MeiZhiDTO.dart';
+import 'package:flutter_meizhi/api/dto/MeiZhiResponse.dart';
 
 class MeiZhiVO {
-  final Item item;
+  final MeiZhiResponse wrapper;
 
-  MeiZhiVO(this.item);
+  MeiZhiVO(this.wrapper);
 }
