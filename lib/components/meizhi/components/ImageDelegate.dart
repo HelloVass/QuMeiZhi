@@ -10,29 +10,30 @@ class ImageDelegate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: GestureDetector(
-          onTap: () {
-            _redirectToDetail(context, data);
-          },
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            placeholder: Image(
-              image: AssetImage("images/img_placeholder.png"),
+    return Hero(
+      tag: data.wrapper.url,
+      child: Container(
+        child: GestureDetector(
+            onTap: () {
+              _redirectToDetail(context, data);
+            },
+            child: CachedNetworkImage(
               fit: BoxFit.cover,
-            ),
-            imageUrl: data.wrapper.url,
-          )),
+              placeholder: Image(
+                image: AssetImage("images/img_placeholder.png"),
+                fit: BoxFit.cover,
+              ),
+              imageUrl: data.wrapper.url,
+            )),
+      ),
     );
   }
 
   void _redirectToDetail(BuildContext context, MeiZhiVO data) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MeiZhiDetailPage(
-                  title: data.wrapper.desc,
-                  url: data.wrapper.url,
-                )));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => MeiZhiDetailPage(
+              title: data.wrapper.desc,
+              url: data.wrapper.url,
+            )));
   }
 }

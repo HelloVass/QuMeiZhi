@@ -22,13 +22,15 @@ class _State extends State<MeiZhiDetailPage> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: CachedNetworkImage(
-        fit: BoxFit.fitWidth,
-        imageUrl: widget.url,
-        placeholder: Image(
-          image: AssetImage("images/img_placeholder.png"),
-          fit: BoxFit.cover,
-        ),
+      body: Hero(
+        tag: widget.url,
+        child: CachedNetworkImage(
+            fit: BoxFit.fitWidth,
+            imageUrl: widget.url,
+            placeholder: Image(
+              image: AssetImage("images/img_placeholder.png"),
+              fit: BoxFit.cover,
+            )),
       ),
     );
   }
