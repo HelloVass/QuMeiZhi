@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_meizhi/components/common/photoView/PhotoView.dart';
 
 class MeiZhiDetailPage extends StatefulWidget {
   final String title;
@@ -24,13 +24,9 @@ class _State extends State<MeiZhiDetailPage> {
       ),
       body: Hero(
         tag: widget.url,
-        child: CachedNetworkImage(
-            fit: BoxFit.fitWidth,
-            imageUrl: widget.url,
-            placeholder: Image(
-              image: AssetImage("images/img_placeholder.png"),
-              fit: BoxFit.cover,
-            )),
+        child: PhotoView(
+          url: widget.url,
+        ),
       ),
     );
   }

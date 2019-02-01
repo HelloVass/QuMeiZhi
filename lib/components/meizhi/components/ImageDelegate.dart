@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/components/meizhi/vo/MeiZhiVO.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_meizhi/components/meizhiDetail/page/MeiZhiDetailPage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ImageDelegate extends StatelessWidget {
   final MeiZhiVO data;
