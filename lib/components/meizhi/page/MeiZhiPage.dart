@@ -6,6 +6,7 @@ import 'package:flutter_meizhi/components/common/loadMore/LoadMoreWidget.dart';
 import 'package:flutter_meizhi/api/ApiClient.dart';
 import 'package:flutter_meizhi/api/dto/Result.dart';
 import 'package:flutter_meizhi/api/dto/MeiZhiResponse.dart';
+import 'package:flutter_meizhi/components/common/refresh/SwipeRefreshLayout.dart';
 
 class MeiZhiPage extends StatefulWidget {
   @override
@@ -36,7 +37,7 @@ class _State extends State<MeiZhiPage> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _onRefresh();
   }
 
   @override
@@ -58,24 +59,53 @@ class _State extends State<MeiZhiPage> {
           )
         ],
       ),
-      body: LoadMoreWidget(
-        crossAxisCount: _mode == DisplayMode.Linear ? 1 : 2,
-        adapt: (BuildContext context, int index) => ImageDelegate(
-              data: items[index],
-            ),
-        itemCount: items.length,
-        hasMore: hasMore,
-        loading: loading,
-        error: error,
-        loadMore: () {
-          _loadData();
-        },
+      body: SwipeRefreshLayout(
+        onRefreshListener: _onRefresh,
+        child: LoadMoreWidget(
+          crossAxisCount: _mode == DisplayMode.Linear ? 1 : 2,
+          adapt: (BuildContext context, int index) => ImageDelegate(
+                data: items[index],
+              ),
+          itemCount: items.length,
+          hasMore: hasMore,
+          loading: loading,
+          error: error,
+          onLoadMoreListener: () {
+            _onLoadMore();
+          },
+        ),
       ),
     );
   }
 
-  void _loadData() async {
-    // 开始加载
+  Future<Null> _onRefresh() async {
+    await Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        loading = true;
+        error = null;
+        _pageNum = 1;
+      });
+    });
+
+    await ApiClient.get("api/data/福利/20/$_pageNum").then((json) {
+      setState(() {
+        List<MeiZhiVO> newItems = Result.fromJson(
+                json: json, mapper: (json) => MeiZhiResponse.fromJson(json))
+            .results
+            .map((v) => MeiZhiVO(v))
+            .toList();
+        items = newItems;
+        _pageNum++;
+      });
+    }).catchError((e) {
+      setState(() {
+        loading = false;
+        error = "加载出错";
+      });
+    });
+  }
+
+  void _onLoadMore() async {
     setState(() {
       loading = true;
       error = null;

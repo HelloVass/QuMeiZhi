@@ -3,7 +3,7 @@ import 'package:flutter_meizhi/components/common/loadMore/DefaultLoadingWidget.d
 
 typedef Adapt = Function(BuildContext context, int index);
 
-typedef LoadMore = Function();
+typedef OnLoadMoreListener = Function();
 
 class LoadMoreWidget extends StatefulWidget {
   final int crossAxisCount;
@@ -18,7 +18,7 @@ class LoadMoreWidget extends StatefulWidget {
 
   final String error;
 
-  final LoadMore loadMore;
+  final OnLoadMoreListener onLoadMoreListener;
 
   LoadMoreWidget(
       {Key key,
@@ -28,7 +28,7 @@ class LoadMoreWidget extends StatefulWidget {
       @required this.hasMore,
       @required this.loading,
       @required this.error,
-      @required this.loadMore})
+      @required this.onLoadMoreListener})
       : super(key: key);
 
   @override
@@ -58,7 +58,7 @@ class _State extends State<LoadMoreWidget> {
           // 没有更多数据
           return;
         }
-        widget.loadMore();
+        widget.onLoadMoreListener();
       }
     });
   }
