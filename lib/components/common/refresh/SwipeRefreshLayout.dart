@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-typedef OnRefreshListener = Future<Null> Function();
+typedef OnRefreshListener = Future<void> Function();
 
 class SwipeRefreshLayout extends StatefulWidget {
   final Widget child;

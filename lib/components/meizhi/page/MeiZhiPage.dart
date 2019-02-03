@@ -78,7 +78,7 @@ class _State extends State<MeiZhiPage> {
     );
   }
 
-  Future<Null> _onRefresh() async {
+  Future<void> _onRefresh() async {
     await Future.delayed(Duration(seconds: 1), () {
       setState(() {
         loading = true;
@@ -95,6 +95,9 @@ class _State extends State<MeiZhiPage> {
             .map((v) => MeiZhiVO(v))
             .toList();
         items = newItems;
+        loading = false;
+        hasMore = newItems.length >= 10;
+        error = null;
         _pageNum++;
       });
     }).catchError((e) {
