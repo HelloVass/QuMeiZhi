@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/components/latest/vo/ItemVO.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_meizhi/components/browser/page/LiteBrowser.dart';
 
 class DailyWidget extends StatelessWidget {
   final DailyVO dailyVO;
@@ -11,7 +12,9 @@ class DailyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: GestureDetector(
-        onTap: _redirectToDetail(dailyVO),
+        onTap: () {
+          _redirectToDetail(context, dailyVO);
+        },
         child: Card(
           child: Padding(
               padding: EdgeInsets.all(10.0),
@@ -73,5 +76,11 @@ class DailyWidget extends StatelessWidget {
     );
   }
 
-  _redirectToDetail(DailyVO dailyVO) {}
+  _redirectToDetail(BuildContext context, DailyVO dailyVO) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => LiteBrowser(
+              title: dailyVO.wrapper.desc,
+              url: dailyVO.wrapper.url,
+            )));
+  }
 }
