@@ -8,7 +8,6 @@ class MeiZhiResponse {
   final String type;
   final String url;
   final String who;
-  final List<String> images;
 
   MeiZhiResponse(
       {this.id,
@@ -19,10 +18,9 @@ class MeiZhiResponse {
       this.source,
       this.type,
       this.url,
-      this.who,
-      this.images});
+      this.who});
 
-  MeiZhiResponse.fromJson(Map<String, dynamic> json)
+  MeiZhiResponse.fromJson(json)
       : id = json['id'],
         used = json['used'],
         createdAt = json['createdAt'],
@@ -31,6 +29,5 @@ class MeiZhiResponse {
         source = json['source'],
         type = json['type'],
         url = json['url'],
-        who = json['who'],
-        images = json['images'];
+        who = json['who'];
 }
