@@ -8,6 +8,7 @@ class MeiZhiResponse {
   final String type;
   final String url;
   final String who;
+  final List<String> images;
 
   MeiZhiResponse(
       {this.id,
@@ -18,7 +19,8 @@ class MeiZhiResponse {
       this.source,
       this.type,
       this.url,
-      this.who});
+      this.who,
+      this.images});
 
   MeiZhiResponse.fromJson(json)
       : id = json['id'],
@@ -29,5 +31,8 @@ class MeiZhiResponse {
         source = json['source'],
         type = json['type'],
         url = json['url'],
-        who = json['who'];
+        who = json['who'],
+        images = (json['images'] != null
+            ? (json['images'] as List).map((v) => v.toString()).toList()
+            : null);
 }
