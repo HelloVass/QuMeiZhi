@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/api/ApiClient.dart';
 import 'package:flutter_meizhi/api/dto/DailyResponse.dart';
-import 'package:flutter_meizhi/components/history/page/HistoryPage.dart';
-import 'package:flutter_meizhi/components/latest/components/DailyWdiget.dart';
-import 'package:flutter_meizhi/components/latest/components/FuliWidget.dart';
-import 'package:flutter_meizhi/components/latest/components/SectionWidget.dart';
-import 'package:flutter_meizhi/components/latest/vo/ItemVO.dart';
+import 'package:flutter_meizhi/components/daily/components/DailyWdiget.dart';
+import 'package:flutter_meizhi/components/daily/components/FuLiWidget.dart';
+import 'package:flutter_meizhi/components/daily/components/SectionWidget.dart';
+import 'package:flutter_meizhi/components/daily/vo/ItemVO.dart';
 
-class LatestPage extends StatefulWidget {
+class DailyPage extends StatefulWidget {
+  final String title;
+  final String date;
+
+  DailyPage({Key key, @required this.title, @required this.date})
+      : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _State();
   }
 }
 
-class _State extends State<LatestPage> {
+class _State extends State<DailyPage> {
   List<ItemVO> _items = [];
 
   @override
@@ -27,26 +32,17 @@ class _State extends State<LatestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('最新'),
+        title: Text(widget.title),
         centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.reorder),
-            onPressed: () => _redirectToHistory(context),
-          )
-        ],
       ),
       body: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return _buildItems(context, _items[index]);
-        },
-        itemCount: _items.length,
-      ),
+          itemCount: _items.length,
+          itemBuilder: (context, index) => _buildItem(context, _items[index])),
     );
   }
 
   void _loadData() async {
-    await ApiClient.get('api/today').then((json) {
+    await ApiClient.get('api/day/${widget.date}').then((json) {
       setState(() {
         _items = _mapper(DailyResponse.fromJson(json));
       });
@@ -80,6 +76,7 @@ class _State extends State<LatestPage> {
     }
 
     if (dailyResponse.result.resource != null) {
+      result.add(SectionVO(title: '拓展资源'));
       result += dailyResponse.result.resource
           .map((v) => DailyVO(wrapper: v))
           .toList();
@@ -88,7 +85,7 @@ class _State extends State<LatestPage> {
     return result;
   }
 
-  Widget _buildItems(BuildContext context, ItemVO item) {
+  Widget _buildItem(BuildContext context, ItemVO item) {
     if (item is SectionVO) {
       return SectionWidget(
         title: item.title,
@@ -108,10 +105,5 @@ class _State extends State<LatestPage> {
     }
 
     throw new Exception('unknown item ==>>>$item');
-  }
-
-  void _redirectToHistory(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => HistoryPage()));
   }
 }
