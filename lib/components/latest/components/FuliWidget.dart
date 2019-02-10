@@ -10,19 +10,22 @@ class FuliWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16.0),
-      child: GestureDetector(
-        onTap: () => _redirectToMeiZhiDetail(context, data),
-        child: CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl: data.wrapper.url,
-          placeholder: Image(
-            image: AssetImage('images/img_placeholder'),
+    return Hero(
+      tag: data.wrapper.url,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 16.0),
+        child: GestureDetector(
+          onTap: () => _redirectToMeiZhiDetail(context, data),
+          child: CachedNetworkImage(
             fit: BoxFit.cover,
+            imageUrl: data.wrapper.url,
+            placeholder: Image(
+              image: AssetImage('images/img_placeholder'),
+              fit: BoxFit.cover,
+              height: 190.0,
+            ),
             height: 190.0,
           ),
-          height: 190.0,
         ),
       ),
     );

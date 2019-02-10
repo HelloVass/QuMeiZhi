@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/api/ApiClient.dart';
 import 'package:flutter_meizhi/api/dto/DailyResponse.dart';
+import 'package:flutter_meizhi/components/common/status/StatusLayout.dart';
 import 'package:flutter_meizhi/components/history/page/HistoryPage.dart';
 import 'package:flutter_meizhi/components/latest/components/DailyWdiget.dart';
 import 'package:flutter_meizhi/components/latest/components/FuliWidget.dart';
@@ -36,11 +37,14 @@ class _State extends State<LatestPage> {
           )
         ],
       ),
-      body: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return _buildItems(context, _items[index]);
-        },
-        itemCount: _items.length,
+      body: StatusLayout(
+        loading: _items.isEmpty,
+        child: ListView.builder(
+          itemBuilder: (BuildContext context, int index) {
+            return _buildItems(context, _items[index]);
+          },
+          itemCount: _items.length,
+        ),
       ),
     );
   }

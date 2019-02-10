@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_meizhi/components/main/vo/TabVO.dart';
-import 'package:flutter_meizhi/components/main/components/TabWidget.dart';
-import 'package:flutter_meizhi/components/latest/page/LatestPage.dart';
 import 'package:flutter_meizhi/components/category/page/CategoryPage.dart';
+import 'package:flutter_meizhi/components/latest/page/LatestPage.dart';
+import 'package:flutter_meizhi/components/main/components/TabWidget.dart';
+import 'package:flutter_meizhi/components/main/vo/TabVO.dart';
 import 'package:flutter_meizhi/components/meizhi/page/MeiZhiPage.dart';
 import 'package:flutter_meizhi/components/mine/page/MinePage.dart';
 
@@ -21,20 +21,19 @@ class _State extends State<MainPage> {
     TabVO('我的', Icon(Icons.person), 3)
   ];
 
+  static final _pages = [
+    LatestPage(),
+    CategoryPage(),
+    MeiZhiPage(),
+    MinePage()
+  ];
+
   int _index = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        children: <Widget>[
-          LatestPage(),
-          CategoryPage(),
-          MeiZhiPage(),
-          MinePage()
-        ],
-        index: _index,
-      ),
+      body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(
         items: _tabs
             .map((tab) => BottomNavigationBarItem(

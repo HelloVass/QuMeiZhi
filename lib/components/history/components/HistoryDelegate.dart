@@ -17,42 +17,48 @@ class HistoryDelegate extends StatelessWidget {
       child: GestureDetector(
         onTap: () =>
             _redirectTo(context, data.wrapper.publishedAt.substring(0, 10)),
-        child: Container(
-          color: Color(0xFFDFDFDF),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                child: CachedNetworkImage(
+        child: Hero(
+          tag: _regExp.firstMatch(data.wrapper.content).group(1),
+          child: Container(
+            color: Color(0xFFDFDFDF),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  child: CachedNetworkImage(
                     fit: BoxFit.cover,
-                    imageUrl:
-                        _regExp.firstMatch(data.wrapper.content).group(1)),
-                width: window.physicalSize.width - 20,
-                height: 170,
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 15.0, top: 64, right: 15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      data.wrapper.publishedAt.substring(0, 10),
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                    imageUrl: _regExp.firstMatch(data.wrapper.content).group(1),
+                    placeholder: Image(
+                      image: AssetImage('images/img_placeholder.png'),
+                      fit: BoxFit.cover,
                     ),
-                    Padding(padding: EdgeInsets.only(top: 5.0)),
-                    Text(
-                      data.wrapper.title,
-                      maxLines: 3,
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    )
-                  ],
+                  ),
+                  width: window.physicalSize.width - 20,
                 ),
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.only(left: 15.0, top: 64, right: 15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        data.wrapper.publishedAt.substring(0, 10),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 5.0)),
+                      Text(
+                        data.wrapper.title,
+                        maxLines: 3,
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            margin: EdgeInsets.all(4.0),
           ),
-          margin: EdgeInsets.all(4.0),
         ),
       ),
     );

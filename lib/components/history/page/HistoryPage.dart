@@ -49,13 +49,15 @@ class _State extends State<HistoryPage> {
         child: SwipeRefreshLayout(
           onRefreshListener: _onRefresh,
           child: LoadMoreWidget(
-              crossAxisCount: 2,
-              itemCount: _items.length,
-              adapt: (context, index) => HistoryDelegate(data: _items[index]),
-              hasMore: _hasMore,
-              loading: _loading,
-              error: _error,
-              onLoadMoreListener: () => _onLoadMore()),
+            crossAxisCount: 1,
+            itemCount: _items.length,
+            adapt: (context, index) => HistoryDelegate(data: _items[index]),
+            hasMore: _hasMore,
+            loading: _loading,
+            error: _error,
+            onLoadMoreListener: () => _onLoadMore(),
+            childAspectRatio: 16 / 9,
+          ),
         ),
       ),
     );

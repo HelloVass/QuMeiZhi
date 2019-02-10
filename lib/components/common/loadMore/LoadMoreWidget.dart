@@ -18,6 +18,8 @@ class LoadMoreWidget extends StatefulWidget {
 
   final String error;
 
+  final double childAspectRatio;
+
   final OnLoadMoreListener onLoadMoreListener;
 
   LoadMoreWidget(
@@ -28,6 +30,7 @@ class LoadMoreWidget extends StatefulWidget {
       @required this.hasMore,
       @required this.loading,
       @required this.error,
+        @required this.childAspectRatio,
       @required this.onLoadMoreListener})
       : super(key: key);
 
@@ -83,9 +86,11 @@ class _State extends State<LoadMoreWidget> {
               : widget.adapt(context, index),
       controller: _scrollController,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: widget.crossAxisCount,
-          mainAxisSpacing: 5.0,
-          crossAxisSpacing: 5.0),
+        crossAxisCount: widget.crossAxisCount,
+        mainAxisSpacing: 5.0,
+        crossAxisSpacing: 5.0,
+        childAspectRatio: widget.childAspectRatio,
+      ),
     );
   }
 

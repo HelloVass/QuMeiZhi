@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_meizhi/components/meizhi/vo/MeiZhiVO.dart';
-import 'package:flutter_meizhi/components/meizhi/vo/DisplayMode.dart';
-import 'package:flutter_meizhi/components/meizhi/components/ImageDelegate.dart';
-import 'package:flutter_meizhi/components/common/loadMore/LoadMoreWidget.dart';
 import 'package:flutter_meizhi/api/ApiClient.dart';
-import 'package:flutter_meizhi/api/dto/Result.dart';
 import 'package:flutter_meizhi/api/dto/MeiZhiResponse.dart';
+import 'package:flutter_meizhi/api/dto/Result.dart';
+import 'package:flutter_meizhi/components/common/loadMore/LoadMoreWidget.dart';
 import 'package:flutter_meizhi/components/common/refresh/SwipeRefreshLayout.dart';
+import 'package:flutter_meizhi/components/meizhi/components/ImageDelegate.dart';
+import 'package:flutter_meizhi/components/meizhi/vo/DisplayMode.dart';
+import 'package:flutter_meizhi/components/meizhi/vo/MeiZhiVO.dart';
 
 class MeiZhiPage extends StatefulWidget {
   @override
@@ -70,6 +70,7 @@ class _State extends State<MeiZhiPage> {
           hasMore: hasMore,
           loading: loading,
           error: error,
+          childAspectRatio: 4 / 3,
           onLoadMoreListener: () {
             _onLoadMore();
           },
