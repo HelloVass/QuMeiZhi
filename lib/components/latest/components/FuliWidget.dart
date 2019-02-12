@@ -20,7 +20,7 @@ class FuliWidget extends StatelessWidget {
             fit: BoxFit.cover,
             imageUrl: data.wrapper.url,
             placeholder: Image(
-              image: AssetImage('images/img_placeholder'),
+              image: AssetImage('images/img_placeholder.png'),
               fit: BoxFit.cover,
               height: 190.0,
             ),

@@ -5,7 +5,8 @@ class LiteBrowser extends StatefulWidget {
   final String title;
   final String url;
 
-  LiteBrowser({Key key, this.title, this.url}) : super(key: key);
+  LiteBrowser({Key key, @required this.title, @required this.url})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
