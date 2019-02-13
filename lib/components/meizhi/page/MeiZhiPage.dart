@@ -48,7 +48,9 @@ class _State extends State<MeiZhiPage> {
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.transform),
+            icon: _mode == DisplayMode.Linear
+                ? Icon(Icons.grid_off)
+                : Icon(Icons.grid_on),
             onPressed: () {
               setState(() {
                 _mode = (_mode == DisplayMode.Linear)

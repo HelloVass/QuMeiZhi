@@ -32,7 +32,7 @@ class _State extends State<LatestPage> {
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.reorder),
+            icon: Icon(Icons.history),
             onPressed: () => _redirectToHistory(context),
           )
         ],
