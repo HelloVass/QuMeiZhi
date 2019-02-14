@@ -6,7 +6,7 @@ import 'package:flutter_meizhi/components/daily/vo/ItemVO.dart';
 class DailyWidget extends StatelessWidget {
   final DailyVO dailyVO;
 
-  DailyWidget({this.dailyVO});
+  DailyWidget({Key key, this.dailyVO}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,37 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/components/common/loadMore/DefaultLoadingWidget.dart';
 
-typedef Adapt = Function(BuildContext context, int index);
+typedef BuildItem = Function(BuildContext context, int index);
 
-typedef OnLoadMoreListener = Function();
+typedef OnLoadMore = Function();
 
-class LoadMoreWidget extends StatefulWidget {
+class GridLoadMoreWrapper extends StatefulWidget {
   final int crossAxisCount;
+
+  final double mainAxisSpacing;
+
+  final double crossAxisSpacing;
 
   final int itemCount;
 
-  final Adapt adapt;
+  final BuildItem buildItem;
 
   final bool hasMore;
 
   final bool loading;
 
-  final String error;
+  final Error error;
 
   final double childAspectRatio;
 
-  final OnLoadMoreListener onLoadMoreListener;
+  final OnLoadMore onLoadMore;
 
-  LoadMoreWidget(
+  GridLoadMoreWrapper(
       {Key key,
+      @required this.mainAxisSpacing,
+      @required this.crossAxisSpacing,
       @required this.crossAxisCount,
       @required this.itemCount,
-      @required this.adapt,
+      @required this.buildItem,
       @required this.hasMore,
       @required this.loading,
       @required this.error,
-        @required this.childAspectRatio,
-      @required this.onLoadMoreListener})
+      @required this.childAspectRatio,
+      @required this.onLoadMore})
       : super(key: key);
 
   @override
@@ -40,7 +46,7 @@ class LoadMoreWidget extends StatefulWidget {
   }
 }
 
-class _State extends State<LoadMoreWidget> {
+class _State extends State<GridLoadMoreWrapper> {
   // 控制器
   final ScrollController _scrollController = ScrollController();
 
@@ -61,7 +67,7 @@ class _State extends State<LoadMoreWidget> {
           // 没有更多数据
           return;
         }
-        widget.onLoadMoreListener();
+        widget.onLoadMore();
       }
     });
   }
@@ -77,20 +83,19 @@ class _State extends State<LoadMoreWidget> {
     return GridView.builder(
       padding: EdgeInsets.all(5.0),
       itemCount: widget.itemCount + 1,
-      itemBuilder: (BuildContext context, int index) =>
-          index >= widget.itemCount
-              ? DefaultLoadingWidget(
-                  hasMore: widget.hasMore,
-                  loading: widget.loading,
-                  error: widget.error)
-              : widget.adapt(context, index),
-      controller: _scrollController,
+      itemBuilder: (context, index) => index >= widget.itemCount
+          ? DefaultLoadingWidget(
+              hasMore: widget.hasMore,
+              loading: widget.loading,
+              error: widget.error)
+          : widget.buildItem(context, index),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: widget.crossAxisCount,
         mainAxisSpacing: 5.0,
         crossAxisSpacing: 5.0,
+        crossAxisCount: widget.crossAxisCount,
         childAspectRatio: widget.childAspectRatio,
       ),
+      controller: _scrollController,
     );
   }
 

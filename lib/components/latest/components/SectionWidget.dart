@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class SectionWidget extends StatelessWidget {
   final String title;
 
+  SectionWidget({Key key, this.title}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,6 +19,4 @@ class SectionWidget extends StatelessWidget {
       ),
     );
   }
-
-  SectionWidget({this.title});
 }

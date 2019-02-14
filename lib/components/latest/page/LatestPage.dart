@@ -9,13 +9,16 @@ import 'package:flutter_meizhi/components/latest/components/SectionWidget.dart';
 import 'package:flutter_meizhi/components/latest/vo/ItemVO.dart';
 
 class LatestPage extends StatefulWidget {
+  LatestPage({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _State();
   }
 }
 
-class _State extends State<LatestPage> {
+class _State extends State<LatestPage>
+    with AutomaticKeepAliveClientMixin<LatestPage> {
   List<ItemVO> _items = [];
 
   @override
@@ -61,8 +64,9 @@ class _State extends State<LatestPage> {
     List<ItemVO> result = [];
 
     if (dailyResponse.result.fuli != null) {
-      result +=
-          dailyResponse.result.fuli.map((v) => FuLiVO(wrapper: v)).toList();
+      ItemVO itemVO =
+          dailyResponse.result.fuli.map((v) => FuLiVO(wrapper: v)).toList()[0];
+      result.add(itemVO);
     }
 
     if (dailyResponse.result.android != null) {
@@ -118,4 +122,7 @@ class _State extends State<LatestPage> {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => HistoryPage()));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

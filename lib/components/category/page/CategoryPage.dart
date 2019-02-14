@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/components/category/components/ArticlesPage.dart';
 
 class CategoryPage extends StatefulWidget {
+  CategoryPage({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _State();
   }
 }
 
-class _State extends State<CategoryPage> with SingleTickerProviderStateMixin {
+class _State extends State<CategoryPage>
+    with
+        SingleTickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin<CategoryPage> {
   static const _tabs = ['Android', 'iOS', '前端', '休息视频', '拓展资源', '瞎推荐', 'App'];
 
   TabController _tabController;
@@ -49,4 +54,7 @@ class _State extends State<CategoryPage> with SingleTickerProviderStateMixin {
     super.dispose();
     _tabController.dispose();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

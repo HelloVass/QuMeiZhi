@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/api/ApiClient.dart';
 import 'package:flutter_meizhi/api/dto/MeiZhiResponse.dart';
 import 'package:flutter_meizhi/api/dto/Result.dart';
-import 'package:flutter_meizhi/components/common/loadMore/LoadMoreWidget.dart';
+import 'package:flutter_meizhi/components/common/loadMore/GridLoadMoreWrapper.dart';
 import 'package:flutter_meizhi/components/common/refresh/SwipeRefreshLayout.dart';
 import 'package:flutter_meizhi/components/meizhi/components/ImageDelegate.dart';
 import 'package:flutter_meizhi/components/meizhi/vo/DisplayMode.dart';
 import 'package:flutter_meizhi/components/meizhi/vo/MeiZhiVO.dart';
 
 class MeiZhiPage extends StatefulWidget {
+  MeiZhiPage({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _State();
@@ -20,19 +22,19 @@ class _State extends State<MeiZhiPage> {
   var _mode = DisplayMode.Linear;
 
   // 加载中
-  var loading = false;
+  var _loading = false;
 
   // 有更多
-  var hasMore = true;
+  var _hasMore = true;
 
   // 出错
-  var error;
+  Error _error;
 
   // 页数
   var _pageNum = 1;
 
   // 数据
-  List<MeiZhiVO> items = List();
+  List<MeiZhiVO> _items = List();
 
   @override
   void initState() {
@@ -63,19 +65,17 @@ class _State extends State<MeiZhiPage> {
       ),
       body: SwipeRefreshLayout(
         onRefreshListener: _onRefresh,
-        child: LoadMoreWidget(
+        child: GridLoadMoreWrapper(
+          mainAxisSpacing: 5.0,
+          crossAxisSpacing: 5.0,
           crossAxisCount: _mode == DisplayMode.Linear ? 1 : 2,
-          adapt: (BuildContext context, int index) => ImageDelegate(
-                data: items[index],
-              ),
-          itemCount: items.length,
-          hasMore: hasMore,
-          loading: loading,
-          error: error,
-          childAspectRatio: 4 / 3,
-          onLoadMoreListener: () {
-            _onLoadMore();
-          },
+          buildItem: (context, index) => ImageDelegate(data: _items[index]),
+          itemCount: _items.length,
+          hasMore: _hasMore,
+          loading: _loading,
+          error: _error,
+          childAspectRatio: 1 / 1,
+          onLoadMore: () => _onLoadMore(),
         ),
       ),
     );
@@ -84,8 +84,8 @@ class _State extends State<MeiZhiPage> {
   Future<void> _onRefresh() async {
     await Future.delayed(Duration(seconds: 1), () {
       setState(() {
-        loading = true;
-        error = null;
+        _loading = true;
+        _error = null;
         _pageNum = 1;
       });
     });
@@ -97,24 +97,24 @@ class _State extends State<MeiZhiPage> {
             .results
             .map((v) => MeiZhiVO(v))
             .toList();
-        items = newItems;
-        loading = false;
-        hasMore = newItems.length >= 10;
-        error = null;
+        _items = newItems;
+        _loading = false;
+        _hasMore = newItems.length >= 10;
+        _error = null;
         _pageNum++;
       });
     }).catchError((e) {
       setState(() {
-        loading = false;
-        error = "加载出错";
+        _loading = false;
+        _error = e;
       });
     });
   }
 
   void _onLoadMore() async {
     setState(() {
-      loading = true;
-      error = null;
+      _loading = true;
+      _error = null;
     });
 
     await ApiClient.get("api/data/福利/20/$_pageNum").then((json) {
@@ -124,16 +124,16 @@ class _State extends State<MeiZhiPage> {
             .results
             .map((v) => MeiZhiVO(v))
             .toList();
-        items += newItems;
-        loading = false;
-        hasMore = newItems.length >= 10;
-        error = null;
+        _items += newItems;
+        _loading = false;
+        _hasMore = newItems.length >= 10;
+        _error = null;
         _pageNum++;
       });
     }).catchError((e) {
       setState(() {
-        loading = false;
-        error = "加载出错";
+        _loading = false;
+        _error = e;
       });
     });
   }

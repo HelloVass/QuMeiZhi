@@ -23,7 +23,8 @@ class ApiClient {
           responseType: ResponseType.JSON));
       // 返回拦截器
       _dio.interceptor.response.onSuccess = (Response response) {
-        print("ApiClient,response succeed,data ==>>>$response");
+        print(
+            "ApiClient,response succeed,url ==>>>${response.request.baseUrl + response.request.path}");
         return response;
       };
       _dio.interceptor.response.onError = (DioError e) {

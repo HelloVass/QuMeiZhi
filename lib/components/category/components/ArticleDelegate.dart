@@ -47,10 +47,17 @@ class CardWidget extends StatelessWidget {
             Row(
               children: <Widget>[
                 Expanded(
-                    child: Text(
-                  title,
-                  maxLines: 4,
-                  style: TextStyle(fontSize: 16.0),
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Container(
+                      child: Text(
+                        title,
+                        maxLines: 3,
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                    ),
+                  ),
                 )),
                 imgs == null || imgs.isEmpty
                     ? Text('')

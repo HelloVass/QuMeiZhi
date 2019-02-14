@@ -6,26 +6,23 @@ import 'package:flutter_meizhi/components/meizhiDetail/page/MeiZhiDetailPage.dar
 class FuliWidget extends StatelessWidget {
   final FuLiVO data;
 
-  FuliWidget({@required this.data});
+  FuliWidget({Key key, @required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: data.wrapper.url,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 16.0),
-        child: GestureDetector(
-          onTap: () => _redirectToMeiZhiDetail(context, data),
-          child: CachedNetworkImage(
+    return Container(
+      margin: EdgeInsets.only(bottom: 16.0),
+      child: GestureDetector(
+        onTap: () => _redirectToMeiZhiDetail(context, data),
+        child: CachedNetworkImage(
+          fit: BoxFit.cover,
+          imageUrl: data.wrapper.url,
+          placeholder: Image(
+            image: AssetImage('images/img_placeholder.png'),
             fit: BoxFit.cover,
-            imageUrl: data.wrapper.url,
-            placeholder: Image(
-              image: AssetImage('images/img_placeholder.png'),
-              fit: BoxFit.cover,
-              height: 190.0,
-            ),
             height: 190.0,
           ),
+          height: 190.0,
         ),
       ),
     );
@@ -33,8 +30,7 @@ class FuliWidget extends StatelessWidget {
 
   void _redirectToMeiZhiDetail(BuildContext context, FuLiVO data) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            MeiZhiDetailPage(
+        builder: (context) => MeiZhiDetailPage(
               title: data.wrapper.desc,
               url: data.wrapper.url,
             )));

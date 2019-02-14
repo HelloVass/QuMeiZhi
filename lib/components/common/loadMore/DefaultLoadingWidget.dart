@@ -5,10 +5,14 @@ class DefaultLoadingWidget extends StatelessWidget {
 
   final bool loading;
 
-  final String error;
+  final Error error;
 
   DefaultLoadingWidget(
-      {@required this.hasMore, @required this.loading, @required this.error});
+      {Key key,
+      @required this.hasMore,
+      @required this.loading,
+      @required this.error})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

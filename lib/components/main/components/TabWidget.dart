@@ -4,7 +4,8 @@ class TabWidget extends StatelessWidget {
   final String title;
   final bool selected;
 
-  TabWidget({@required this.title, @required this.selected});
+  TabWidget({Key key, @required this.title, @required this.selected})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

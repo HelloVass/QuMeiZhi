@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/api/ApiClient.dart';
 import 'package:flutter_meizhi/api/dto/HistoryResponse.dart';
 import 'package:flutter_meizhi/api/dto/Result.dart';
-import 'package:flutter_meizhi/components/common/loadMore/LoadMoreWidget.dart';
+import 'package:flutter_meizhi/components/common/loadMore/LinearLoadMoreWrapper.dart';
 import 'package:flutter_meizhi/components/common/refresh/SwipeRefreshLayout.dart';
 import 'package:flutter_meizhi/components/common/status/StatusLayout.dart';
 import 'package:flutter_meizhi/components/history/components/HistoryDelegate.dart';
 import 'package:flutter_meizhi/components/history/vo/HistoryVO.dart';
 
 class HistoryPage extends StatefulWidget {
+  HistoryPage({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _State();
@@ -23,7 +25,7 @@ class _State extends State<HistoryPage> {
   var _hasMore = true;
 
   // 出错
-  var _error;
+  Error _error;
 
   // 页数
   var _pageNum = 1;
@@ -48,16 +50,14 @@ class _State extends State<HistoryPage> {
         loading: _items.isEmpty,
         child: SwipeRefreshLayout(
           onRefreshListener: _onRefresh,
-          child: LoadMoreWidget(
-            crossAxisCount: 1,
-            itemCount: _items.length,
-            adapt: (context, index) => HistoryDelegate(data: _items[index]),
-            hasMore: _hasMore,
-            loading: _loading,
-            error: _error,
-            onLoadMoreListener: () => _onLoadMore(),
-            childAspectRatio: 16 / 9,
-          ),
+          child: LinearLoadMoreWrapper(
+              itemCount: _items.length,
+              hasMore: _hasMore,
+              loading: _loading,
+              error: _error,
+              buildItem: (context, index) =>
+                  HistoryDelegate(data: _items[index]),
+              onLoadMore: () => _onLoadMore()),
         ),
       ),
     );
@@ -84,6 +84,9 @@ class _State extends State<HistoryPage> {
         _error = null;
         _pageNum++;
       });
+    }).catchError((Error e) {
+      _loading = false;
+      _error = e;
     });
   }
 
@@ -105,6 +108,9 @@ class _State extends State<HistoryPage> {
         _error = null;
         _pageNum++;
       });
+    }).catchError((Error e) {
+      _loading = false;
+      _error = e;
     });
   }
 }

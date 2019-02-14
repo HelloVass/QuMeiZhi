@@ -6,7 +6,8 @@ class SwipeRefreshLayout extends StatefulWidget {
   final Widget child;
   final OnRefreshListener onRefreshListener;
 
-  SwipeRefreshLayout({this.child, this.onRefreshListener});
+  SwipeRefreshLayout({Key key, this.child, this.onRefreshListener})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

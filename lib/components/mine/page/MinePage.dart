@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MinePage extends StatefulWidget {
+  MinePage({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _State();

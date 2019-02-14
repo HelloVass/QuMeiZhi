@@ -4,9 +4,10 @@ import 'package:flutter_meizhi/components/latest/page/LatestPage.dart';
 import 'package:flutter_meizhi/components/main/components/TabWidget.dart';
 import 'package:flutter_meizhi/components/main/vo/TabVO.dart';
 import 'package:flutter_meizhi/components/meizhi/page/MeiZhiPage.dart';
-import 'package:flutter_meizhi/components/mine/page/MinePage.dart';
 
 class MainPage extends StatefulWidget {
+  MainPage({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _State();
@@ -18,14 +19,6 @@ class _State extends State<MainPage> {
     TabVO('最新', Icon(Icons.home), 0),
     TabVO('分类', Icon(Icons.widgets), 1),
     TabVO('妹纸', Icon(Icons.spa), 2),
-    TabVO('我的', Icon(Icons.person), 3)
-  ];
-
-  static final _pages = [
-    LatestPage(),
-    CategoryPage(),
-    MeiZhiPage(),
-    MinePage()
   ];
 
   int _index = 0;
@@ -33,7 +26,10 @@ class _State extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_index],
+      body: IndexedStack(
+        children: <Widget>[LatestPage(), CategoryPage(), MeiZhiPage()],
+        index: _index,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: _tabs
             .map((tab) => BottomNavigationBarItem(
@@ -46,12 +42,14 @@ class _State extends State<MainPage> {
             .toList(),
         type: BottomNavigationBarType.fixed,
         currentIndex: _index,
-        onTap: (index) {
-          setState(() {
-            _index = index;
-          });
-        },
+        onTap: (index) => _tabSelected(index),
       ),
     );
+  }
+
+  void _tabSelected(int index) {
+    setState(() {
+      _index = index;
+    });
   }
 }

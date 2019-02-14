@@ -4,7 +4,7 @@ import 'package:flutter_meizhi/api/dto/MeiZhiResponse.dart';
 import 'package:flutter_meizhi/api/dto/Result.dart';
 import 'package:flutter_meizhi/components/category/components/ArticleDelegate.dart';
 import 'package:flutter_meizhi/components/category/vo/ArticleVO.dart';
-import 'package:flutter_meizhi/components/common/loadMore/LoadMoreWidget.dart';
+import 'package:flutter_meizhi/components/common/loadMore/LinearLoadMoreWrapper.dart';
 import 'package:flutter_meizhi/components/common/refresh/SwipeRefreshLayout.dart';
 
 class ArticlesPage extends StatefulWidget {
@@ -18,7 +18,8 @@ class ArticlesPage extends StatefulWidget {
   }
 }
 
-class _State extends State<ArticlesPage> with AutomaticKeepAliveClientMixin {
+class _State extends State<ArticlesPage>
+    with AutomaticKeepAliveClientMixin<ArticlesPage> {
   // 加载中
   var _loading = false;
 
@@ -26,7 +27,7 @@ class _State extends State<ArticlesPage> with AutomaticKeepAliveClientMixin {
   var _hasMore = true;
 
   // 出错
-  var _error;
+  Error _error;
 
   // 页数
   var _pageNum = 1;
@@ -45,17 +46,14 @@ class _State extends State<ArticlesPage> with AutomaticKeepAliveClientMixin {
     return Scaffold(
       body: SwipeRefreshLayout(
         onRefreshListener: _onRefresh,
-        child: LoadMoreWidget(
-            crossAxisCount: 1,
-            itemCount: _items.length,
-            adapt: (BuildContext context, int index) => ArticleDelegate(
-                  data: _items[index],
-                ),
-            hasMore: _hasMore,
-            loading: _loading,
-            error: _error,
-            childAspectRatio: 2.5,
-            onLoadMoreListener: () => _onLoadMore()),
+        child: LinearLoadMoreWrapper(
+          itemCount: _items.length,
+          hasMore: _hasMore,
+          loading: _loading,
+          error: _error,
+          buildItem: (context, index) => ArticleDelegate(data: _items[index]),
+          onLoadMore: () => _onLoadMore(),
+        ),
       ),
     );
   }
@@ -84,7 +82,7 @@ class _State extends State<ArticlesPage> with AutomaticKeepAliveClientMixin {
     }).catchError((e) {
       setState(() {
         _loading = false;
-        _error = "加载出错";
+        _error = e;
       });
     });
   }
@@ -111,7 +109,7 @@ class _State extends State<ArticlesPage> with AutomaticKeepAliveClientMixin {
     }).catchError((e) {
       setState(() {
         _loading = false;
-        _error = "加载出错";
+        _error = e;
       });
     });
   }

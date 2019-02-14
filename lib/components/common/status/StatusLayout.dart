@@ -6,7 +6,8 @@ class StatusLayout extends StatefulWidget {
   final Widget child;
   final bool loading;
 
-  StatusLayout({@required this.child, @required this.loading});
+  StatusLayout({Key key, @required this.child, @required this.loading})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

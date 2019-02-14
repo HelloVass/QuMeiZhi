@@ -6,7 +6,8 @@ class MeiZhiDetailPage extends StatefulWidget {
 
   final String url;
 
-  MeiZhiDetailPage({@required this.title, @required this.url});
+  MeiZhiDetailPage({Key key, @required this.title, @required this.url})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -22,11 +23,8 @@ class _State extends State<MeiZhiDetailPage> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: Hero(
-        tag: widget.url,
-        child: PhotoView(
-          url: widget.url,
-        ),
+      body: PhotoView(
+        url: widget.url,
       ),
     );
   }
