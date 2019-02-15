@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:share/share.dart';
+import 'dart:async';
 
 class LiteBrowser extends StatefulWidget {
   final String title;
@@ -15,17 +17,32 @@ class LiteBrowser extends StatefulWidget {
 }
 
 class _State extends State<LiteBrowser> {
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+        ),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () => _share(widget.url),
+          )
+        ],
       ),
       body: WebView(
         initialUrl: widget.url,
         javascriptMode: JavascriptMode.unrestricted,
       ),
     );
+  }
+
+  void _share(String url) {
+    Share.share(url);
   }
 }
