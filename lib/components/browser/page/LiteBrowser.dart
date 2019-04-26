@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:share/share.dart';
-import 'dart:async';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class LiteBrowser extends StatefulWidget {
   final String title;
@@ -17,9 +16,6 @@ class LiteBrowser extends StatefulWidget {
 }
 
 class _State extends State<LiteBrowser> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

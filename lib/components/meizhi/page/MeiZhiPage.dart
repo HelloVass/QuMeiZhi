@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_meizhi/api/ApiClient.dart';
 import 'package:flutter_meizhi/api/dto/MeiZhiResponse.dart';
@@ -17,7 +19,7 @@ class MeiZhiPage extends StatefulWidget {
   }
 }
 
-class _State extends State<MeiZhiPage> {
+class _State extends State<MeiZhiPage> with AutomaticKeepAliveClientMixin<MeiZhiPage> {
   // 显示模式，线性或者网格
   var _mode = DisplayMode.Linear;
 
@@ -137,4 +139,7 @@ class _State extends State<MeiZhiPage> {
       });
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

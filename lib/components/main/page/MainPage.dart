@@ -21,35 +21,58 @@ class _State extends State<MainPage> {
     TabVO('妹纸', Icon(Icons.spa), 2),
   ];
 
-  int _index = 0;
+  final _pages = [LatestPage(), CategoryPage(), MeiZhiPage()];
+
+  PageController _pageController;
+
+  int _index;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = 0;
+    _pageController = PageController(initialPage: _index, keepPage: false);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        children: <Widget>[LatestPage(), CategoryPage(), MeiZhiPage()],
-        index: _index,
+      body: PageView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: _pages.length,
+        onPageChanged: (int index) {
+          setState(() {
+            _index = index;
+          });
+        },
+        controller: _pageController,
+        itemBuilder: (BuildContext context, int index) {
+          return _pages[index];
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: _tabs
-            .map((tab) => BottomNavigationBarItem(
-                  icon: tab.icon,
-                  title: TabWidget(
-                    title: tab.title,
-                    selected: (tab.index == _index),
-                  ),
-                ))
+            .map((tab) =>
+            BottomNavigationBarItem(
+              icon: tab.icon,
+              title: TabWidget(
+                title: tab.title,
+                selected: (tab.index == _index),
+              ),
+            ))
             .toList(),
         type: BottomNavigationBarType.fixed,
         currentIndex: _index,
-        onTap: (index) => _tabSelected(index),
+        onTap: (int index) {
+          _pageController.jumpToPage(index);
+        },
       ),
     );
   }
 
-  void _tabSelected(int index) {
-    setState(() {
-      _index = index;
-    });
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 }
